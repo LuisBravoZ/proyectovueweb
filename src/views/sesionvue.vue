@@ -5,18 +5,19 @@
 
       <label for="username">Usuario:</label>
       <input v-model="username" type="text" id="username" name="username" required :class="{ 'error': !isUsernameValid && username !== '' }">
-      <span v-if="!isUsernameValid && username !== ''" class="error-message">{{ getUsernameErrorMessage() }}</span>
+      <span v-if="!isUsernameValid && username !== ''" class="error-message"></span>
+      
 
       <label for="password">Contraseña:</label>
       <input v-model="password" type="password" id="password" name="password" required :class="{ 'error': !isPasswordValid && password !== '' }">
-      <span v-if="!isPasswordValid && password !== ''" class="error-message">{{ getPasswordErrorMessage() }}</span>
+      <span v-if="!isPasswordValid && password !== ''" class="error-message"></span>
 
       <button type="submit" :disabled="!isFormValid">Iniciar Sesión</button>
     </form>
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
