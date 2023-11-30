@@ -24,7 +24,7 @@
     </div>
   </template>
   
-  <script setup>
+  <script setup lang="ts">
   import { defineProps, ref } from 'vue';
   
   const { equipo } = defineProps(['equipo']);

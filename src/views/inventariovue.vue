@@ -81,7 +81,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue';
 import DetalleEquipo from '../components/DetalleEquipo.vue'; // Asegúrate de ajustar la ruta correcta
 
