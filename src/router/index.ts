@@ -10,7 +10,7 @@ const router = createRouter({
       component: ()=> import('../views/sesionvue.vue')
     },
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       component: ()=> import ('../views/homevue.vue')
     },

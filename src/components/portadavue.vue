@@ -11,7 +11,7 @@
             <RouterLink to="/sesion" class="nav-link">Inicio sesion</RouterLink>
           </li>
           <li>
-            <RouterLink to="https://www.uleam.edu.ec/acerca-de-nosotros" class="nav-link">Acerca de nosotros</RouterLink>
+            <RouterLink to="" class="nav-link">Acerca de nosotros</RouterLink>
           </li>
         </ul>
       </nav>

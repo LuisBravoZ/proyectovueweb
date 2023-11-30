@@ -3,7 +3,7 @@
     <div class="wrapper">
 
       <nav>
-        <RouterLink v-if="$route.path !=='/home'" exact-active-class="activo" to="/home">Home</RouterLink>
+        <RouterLink v-if="$route.path !=='/'" exact-active-class="activo" to="/">Home</RouterLink>
         <RouterLink v-if="$route.path !=='/registro'" exact-active-class="activo" to="/registro">Registro</RouterLink>
         <RouterLink v-if="$route.path !=='/sesion'" exact-active-class="activo" to="/sesion">Inisio sesion</RouterLink>
         <RouterLink v-if="$route.path === '/inventario'" exact-active-class="activo" to="/cerrarsesion">Cerrar Sesión</RouterLink>
