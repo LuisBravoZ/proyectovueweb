@@ -1,11 +1,18 @@
 {
+  
   "files": [],
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "allowJs": true,
+    // Otras configuraciones...
+  },
   "references": [
     {
       "path": "./tsconfig.node.json"
     },
     {
       "path": "./tsconfig.app.json"
-    }
+    },
+    
   ]
 }
