@@ -83,7 +83,16 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import type { Ref } from 'vue';
 import DetalleEquipo from '../components/DetalleEquipo.vue'; // Asegúrate de ajustar la ruta correcta
+
+interface Equipo {
+  numeroSerie: string;
+  nombre: string;
+  tipo: string;
+  cantidad: string;
+  facultad: string;
+}
 
 const modalVisible = ref(false);
 const modalSerial = ref('');
@@ -92,12 +101,15 @@ const modalType = ref('');
 const modalCantidad = ref('');
 const modalFacultad = ref('Facultad de informatica');
 const facultadSeleccionada = ref('todas');
-const inventario = ref([
+const inventario: Ref<Equipo[]> = ref([]);
+//const inventario = ref([
   // Puedes inicializar el inventario con datos de ejemplo si lo deseas
-]);
+//]);
 
 const detalleVisible = ref(false);
-const equipoSeleccionado = ref(null);
+//const equipoSeleccionado = ref(null);
+const equipoSeleccionado = ref<Equipo | null>(null);
+
 
 const cerrarModal = () => {
   modalVisible.value = false;
@@ -113,14 +125,21 @@ const agregarEquipoDesdeModal = () => {
     alert('Por favor, complete todos los campos.');
     return;
   }
-
-  const nuevoEquipo = {
+  const nuevoEquipo: Equipo = {
     numeroSerie: modalSerial.value,
     nombre: modalName.value,
     tipo: modalType.value,
     cantidad: modalCantidad.value,
     facultad: modalFacultad.value,
   };
+  /*
+  const nuevoEquipo = {
+    numeroSerie: modalSerial.value,
+    nombre: modalName.value,
+    tipo: modalType.value,
+    cantidad: modalCantidad.value,
+    facultad: modalFacultad.value,
+  };*/
 
   inventario.value.push(nuevoEquipo);
   cerrarModal();
@@ -142,7 +161,7 @@ const filtrarPorFacultad = () => {
   }
 };
 
-const verDetalles = (index) => {
+const verDetalles = (index: number) => {
   equipoSeleccionado.value = inventario.value[index];
   detalleVisible.value = true;
 };
@@ -152,7 +171,7 @@ const cerrarDetalles = () => {
   equipoSeleccionado.value = null;
 };
 
-const editarEquipo = (index) => {
+const editarEquipo = (index: number) => {
   const equipoSeleccionado = inventario.value[index];
   modalSerial.value = equipoSeleccionado.numeroSerie;
   modalName.value = equipoSeleccionado.nombre;
@@ -165,7 +184,7 @@ const editarEquipo = (index) => {
   abrirModal();
 };
 
-const eliminarEquipo = (index) => {
+const eliminarEquipo = (index: number) => {
   const confirmarEliminar = window.confirm('¿Estás seguro de que deseas eliminar este equipo?');
 
   if (confirmarEliminar) {
