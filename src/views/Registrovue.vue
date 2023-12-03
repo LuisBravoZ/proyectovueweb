@@ -73,7 +73,6 @@ const isFormValid = computed(() => isUsernameValid.value && isPasswordValid.valu
 const handleSubmit = () => {
   if (isFormValid.value) {
     console.log('Formulario válido. Registrándose...');
-    // router.push('/sesion');
     const userData = {
       nombre: nombre.value,
       apellido: apellido.value,

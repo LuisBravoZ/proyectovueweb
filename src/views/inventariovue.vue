@@ -8,16 +8,41 @@
       <div class="modal" v-if="modalVisible">
         <div class="modal-content">
           <label for="modalSerial">Número de Serie:</label>
-          <input type="text" v-model="modalSerial">
+          <input type="text" v-model="modalSerial" required>
 
           <label for="modalName">Nombre del Equipo:</label>
-          <input type="text" v-model="modalName">
+          <input type="text" v-model="modalName" required>
 
           <label for="modalType">Tipo de Equipo:</label>
-          <input type="text" v-model="modalType">
+          <input type="text" v-model="modalType" required>
 
           <label for="modalCantidad">Cantidad:</label>
-          <input type="text" v-model="modalCantidad">
+          <input type="text" v-model="modalCantidad" required>
+
+          <label for="modalStorage">Capacidad de Almacenamiento (GB):</label>
+<input type="text" v-model="modalStorage">
+
+<label for="modalRAM">Memoria RAM (GB):</label>
+<input type="text" v-model="modalRAM">
+
+<label for="modalProcessor">Procesador:</label>
+<input type="text" v-model="modalProcessor">
+
+<label for="modalFechaAdquisicion">Fecha de Adquisición:</label>
+<input type="date" v-model="modalFechaAdquisicion" required>
+
+<label for="modalEstado">Estado:</label>
+<select v-model="modalEstado" required>
+  <option value="En Uso">En Uso</option>
+  <option value="En Mantenimiento">En Mantenimiento</option>
+  <option value="Dado de Baja">Dado de Baja</option>
+</select>
+
+<label for="modalResponsable">Responsable:</label>
+<input type="text" v-model="modalResponsable">
+
+<label for="modalHistorialMantenimiento">Historial de Mantenimiento:</label>
+<textarea v-model="modalHistorialMantenimiento"></textarea>
 
           <label for="modalFacultad">Facultad:</label>
           <select v-model="modalFacultad" required>
@@ -63,7 +88,7 @@
             <td>{{ item.cantidad }}</td>
             <td>{{ item.facultad }}</td>
             <td>
-              <button @click="verDetalles(index)">Ver Detalles</button>
+              <button @click="verDetallesCompleto(index)">Ver Detalles completo</button>
               <button @click="editarEquipo(index)">Editar</button>
               <button @click="eliminarEquipo(index)">Eliminar</button>
             </td>
@@ -73,25 +98,33 @@
     </section>
 
     <!-- Nuevo componente para mostrar detalles de un equipo -->
-    <DetalleEquipo
-      v-if="detalleVisible"
-      :equipo="equipoSeleccionado"
-      @cerrar="cerrarDetalles"
-    />
+    <DetalleEquipoCompleto
+  v-if="detalleCompletoVisible && equipoSeleccionado !== null"
+  :equipo="equipoSeleccionado"
+  @cerrar="cerrarDetallesCompleto"
+/>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref , onBeforeUnmount } from 'vue';
 import type { Ref } from 'vue';
 import DetalleEquipo from '../components/DetalleEquipo.vue'; // Asegúrate de ajustar la ruta correcta
+import DetalleEquipoCompleto from '../components/DetalleEquipoCompleto.vue';
 
 interface Equipo {
   numeroSerie: string;
   nombre: string;
   tipo: string;
-  cantidad: string;
+  cantidad: string; 
   facultad: string;
+  storage: string;
+  ram: string;
+  processor: string;
+  fechaAdquisicion: string;
+  estado: string;
+  responsable: string;
+  historialMantenimiento: string[];
 }
 
 const modalVisible = ref(false);
@@ -101,6 +134,14 @@ const modalType = ref('');
 const modalCantidad = ref('');
 const modalFacultad = ref('Facultad de informatica');
 const facultadSeleccionada = ref('todas');
+const modalStorage = ref('');
+const modalRAM = ref('');
+const modalProcessor = ref('');
+const modalFechaAdquisicion = ref('');
+const modalEstado = ref('En Uso');
+const modalResponsable = ref('');
+const modalHistorialMantenimiento = ref('');
+
 const inventario: Ref<Equipo[]> = ref([]);
 //const inventario = ref([
   // Puedes inicializar el inventario con datos de ejemplo si lo deseas
@@ -109,7 +150,17 @@ const inventario: Ref<Equipo[]> = ref([]);
 const detalleVisible = ref(false);
 //const equipoSeleccionado = ref(null);
 const equipoSeleccionado = ref<Equipo | null>(null);
-
+  
+const cargarDatosLocales = () => {
+  const datosGuardados = localStorage.getItem('inventario');
+  if (datosGuardados) {
+    inventario.value = JSON.parse(datosGuardados);
+  }
+};
+onBeforeUnmount(() => {
+  localStorage.setItem('inventario', JSON.stringify(inventario.value));
+});
+cargarDatosLocales();
 
 const cerrarModal = () => {
   modalVisible.value = false;
@@ -121,6 +172,30 @@ const abrirModal = () => {
 };
 
 const agregarEquipoDesdeModal = () => {
+  
+  // Validar que Número de Serie sea un número
+  if (!/^\d+$/.test(modalSerial.value)) {
+    alert('El Número de Serie debe contener solo números.');
+    return;
+  }
+
+  // Validar que Cantidad sea un número
+  if (!/^\d+$/.test(modalCantidad.value)) {
+    alert('La Cantidad debe contener solo números.');
+    return;
+  }
+
+  // Validar que Capacidad de Almacenamiento sea un número
+  if (!/^\d+$/.test(modalStorage.value)) {
+    alert('La Capacidad de Almacenamiento debe contener solo números.');
+    return;
+  }
+ // Validar que RAM sea un número
+ if (!/^\d+$/.test(modalRAM.value)) {
+    alert('La RAM debe contener solo números.');
+    return;
+  }
+
   if (!modalSerial.value || !modalName.value || !modalType.value || !modalCantidad.value || !modalFacultad.value) {
     alert('Por favor, complete todos los campos.');
     return;
@@ -131,18 +206,19 @@ const agregarEquipoDesdeModal = () => {
     tipo: modalType.value,
     cantidad: modalCantidad.value,
     facultad: modalFacultad.value,
+    storage: modalStorage.value,
+    ram: modalRAM.value,
+    processor: modalProcessor.value,
+    fechaAdquisicion: modalFechaAdquisicion.value,
+    estado: modalEstado.value,
+    responsable: modalResponsable.value,
+    historialMantenimiento: modalHistorialMantenimiento.value.split('\n').map(m => m.trim()).filter(m => m !== ''),
   };
-  /*
-  const nuevoEquipo = {
-    numeroSerie: modalSerial.value,
-    nombre: modalName.value,
-    tipo: modalType.value,
-    cantidad: modalCantidad.value,
-    facultad: modalFacultad.value,
-  };*/
+ 
 
   inventario.value.push(nuevoEquipo);
   cerrarModal();
+  localStorage.setItem('inventario', JSON.stringify(inventario.value));
 };
 
 const limpiarDatosModal = () => {
@@ -151,7 +227,15 @@ const limpiarDatosModal = () => {
   modalType.value = '';
   modalCantidad.value = '';
   modalFacultad.value = 'Facultad de informatica';
+  modalStorage.value = ''; 
+  modalRAM.value = ''; 
+  modalProcessor.value = ''; 
+  modalFechaAdquisicion.value = ''; 
+  modalEstado.value = 'En Uso'; 
+  modalResponsable.value = ''; 
+  modalHistorialMantenimiento.value = ''; 
 };
+
 
 const filtrarPorFacultad = () => {
   if (facultadSeleccionada.value === 'todas') {
@@ -170,19 +254,41 @@ const cerrarDetalles = () => {
   detalleVisible.value = false;
   equipoSeleccionado.value = null;
 };
+const detalleCompletoVisible = ref(false);
+
+const verDetallesCompleto = (index: number) => {
+  equipoSeleccionado.value = filtrarPorFacultad()[index];
+  detalleCompletoVisible.value = true;
+};
+
+const cerrarDetallesCompleto = () => {
+  detalleCompletoVisible.value = false;
+};
 
 const editarEquipo = (index: number) => {
   const equipoSeleccionado = inventario.value[index];
+
+  // Asignar valores al modal
   modalSerial.value = equipoSeleccionado.numeroSerie;
   modalName.value = equipoSeleccionado.nombre;
   modalType.value = equipoSeleccionado.tipo;
   modalCantidad.value = equipoSeleccionado.cantidad;
   modalFacultad.value = equipoSeleccionado.facultad;
+  modalStorage.value = equipoSeleccionado.storage;
+  modalRAM.value = equipoSeleccionado.ram;
+  modalProcessor.value = equipoSeleccionado.processor;
+  modalFechaAdquisicion.value = equipoSeleccionado.fechaAdquisicion;
+  modalEstado.value = equipoSeleccionado.estado;
+  modalResponsable.value = equipoSeleccionado.responsable;
+  modalHistorialMantenimiento.value = equipoSeleccionado.historialMantenimiento.join('\n');
 
+  // Eliminar el equipo seleccionado del inventario
   inventario.value.splice(index, 1);
 
+  // Abrir el modal con los datos del equipo seleccionado
   abrirModal();
 };
+
 
 const eliminarEquipo = (index: number) => {
   const confirmarEliminar = window.confirm('¿Estás seguro de que deseas eliminar este equipo?');
@@ -191,7 +297,9 @@ const eliminarEquipo = (index: number) => {
     inventario.value.splice(index, 1);
   }
 };
+
 </script>
+
 <style lang="postcss" scoped>
 
 /* Estilos para la sección "Agregar" */

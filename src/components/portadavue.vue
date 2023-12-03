@@ -21,35 +21,35 @@
   <style scoped>
   /* Estilos para el título */
   .title {
-    font-size: 36px; /* Tamaño del título */
-    color: #333; /* Color del texto */
-    margin-bottom: 10px; /* Espaciado inferior */
+    font-size: 36px;
+    color: #333; 
+    margin-bottom: 10px; 
   }
   
   /* Estilos para el subtítulo */
   .subtitle {
-    font-size: 20px; /* Tamaño del subtítulo */
-    color: #666; /* Color del texto */
-    margin-bottom: 20px; /* Espaciado inferior mayor */
+    font-size: 20px; 
+    color: #666; 
+    margin-bottom: 20px; 
   }
   
   /* Estilos para la navegación */
   nav {
-    background-color: #333; /* Color de fondo del menú de navegación */
-    padding: 10px; /* Espaciado interior */
-    border-radius: 5px; /* Bordes redondeados */
+    background-color: #333; 
+    padding: 10px; 
+    border-radius: 5px; 
   }
   
   /* Estilos para los enlaces de navegación */
   .nav-link {
-    color: #fff; /* Color del texto de enlace */
-    text-decoration: none; /* Elimina la subrayado de los enlaces */
-    margin-right: 20px; /* Espaciado entre enlaces */
-    font-weight: bold; /* Texto en negrita */
+    color: #fff; 
+    text-decoration: none; 
+    margin-right: 20px; 
+    font-weight: bold; 
   }
   
   .nav-link:hover {
-    text-decoration: underline; /* Subrayado en el hover */
+    text-decoration: underline; 
   }
   </style>
   

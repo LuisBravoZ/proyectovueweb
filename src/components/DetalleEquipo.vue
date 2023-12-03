@@ -31,7 +31,7 @@
   const emit = defineEmits();
   
   const cerrarDetalles = () => {
-    emit('cerrar'); // Emitir el evento para que el componente padre maneje el cierre
+    emit('cerrar'); 
   };
   </script>
   
